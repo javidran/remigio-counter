@@ -3,19 +3,25 @@ package com.dran.remigiocounter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dran.remigiocounter.enums.Card
+import com.dran.remigiocounter.ui.theme.NoRippleTheme
 import com.dran.remigiocounter.ui.theme.RemigioCounterTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,8 +30,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             RemigioCounterTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    Column {
+                        CardOption(cardNumber = Card.ONE)
+                        CardOption(cardNumber = Card.TWO)
+                    }
                 }
             }
         }
@@ -33,34 +45,65 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun CardOption(cardNumber: Card) {
+    Row {
+        val count = remember { mutableStateOf(0) }
+        CardOption(
+            cardNumber = cardNumber,
+            selectedCount = count.value,
+            onCardClicked = {
+                if (count.value == 4) count.value = 0
+                else ++count.value
+            },
+            onCardLongClicked =  {
+                count.value = 0
+            }
+        )
+    }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Button(cardNumber: Card) {
-    val imageDrawable: Int = when(cardNumber) {
-        Card.ONE -> R.drawable.oro_1
-        Card.TWO -> R.drawable.oro_2
-        else -> 0 //Never occurs. TODO: Delete when all cases are covered
+fun CardOption(cardNumber: Card, selectedCount: Int, onCardClicked: () -> Unit, onCardLongClicked: () -> Unit) {
+    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+        Image(
+            painter = painterResource(id = obtainImageDrawable(cardNumber, selectedCount)),
+            contentDescription = "",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .size(200.dp)
+                .combinedClickable(onClick = onCardClicked, onLongClick = onCardLongClicked)
+        )
     }
+}
 
-    val image: Painter = painterResource(id = imageDrawable)
-    Image(painter = image, contentDescription = "", modifier = Modifier.fillMaxWidth(0.25f))
+@DrawableRes
+private fun obtainImageDrawable(cardNumber: Card, selectedCount: Int): Int {
+    return when (cardNumber) {
+        Card.ONE -> when (selectedCount) {
+            0 -> R.drawable.uno_0
+            1 -> R.drawable.uno_1
+            2 -> R.drawable.uno_2
+            3 -> R.drawable.uno_3
+            4 -> R.drawable.uno_4
+            else -> throw java.lang.IllegalStateException()
+        }
+        Card.TWO -> when (selectedCount) {
+            0 -> R.drawable.dos_0
+            1 -> R.drawable.dos_1
+            2 -> R.drawable.dos_2
+            3 -> R.drawable.dos_3
+            4 -> R.drawable.dos_4
+            else -> throw java.lang.IllegalStateException()
+        }
+        else -> throw java.lang.IllegalStateException()
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CardPreview() {
     RemigioCounterTheme {
-        Button(cardNumber = Card.ONE)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    RemigioCounterTheme {
-        Greeting("Android")
+        CardOption(cardNumber = Card.ONE)
     }
 }
