@@ -5,8 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.dran.remigiocounter.CardModelView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dran.remigiocounter.ui.theme.RemigioCounterTheme
+import com.dran.remigiocounter.viewmodels.CardModelView
 
 @Composable
 fun MainUI() {
@@ -15,11 +16,12 @@ fun MainUI() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            val tasksViewModel: CardModelView = viewModel()
-            CardList(
-                list = tasksViewModel.taskList,
-                onCheckedTask = tasksViewModel::onCheckedChange,
-                onCloseTask = tasksViewModel::removeTask
+            val cardViewModel: CardModelView = viewModel()
+            CardCounterList(
+                list = cardViewModel.cardList,
+                onCountDecrement = cardViewModel::onCountDecrement,
+                onCountIncrement = cardViewModel::onCountIncrement,
+                onCountReset = cardViewModel::onCountReset
             )
         }
     }

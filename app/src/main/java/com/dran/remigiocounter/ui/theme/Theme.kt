@@ -10,7 +10,10 @@ private val DarkColorPalette = darkColorScheme()
 private val LightColorPalette = lightColorScheme()
 
 @Composable
-fun RemigioCounterTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun RemigioCounterTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colorScheme = when {
         dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
@@ -20,7 +23,7 @@ fun RemigioCounterTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Co
     }
 
     MaterialTheme(
-            colorScheme = colorScheme,
-            content = content
+        colorScheme = colorScheme,
+        content = content
     )
 }

@@ -17,52 +17,74 @@ import com.dran.remigiocounter.ui.theme.RemigioCounterTheme
 
 @Composable
 fun CardCounter(
-    card: Card,
-    onCountDecrement: (Card) -> Unit,
-    onCountIncrement: (Card) -> Unit,
-    onCountReset: (Card) -> Unit
+    cardNumber: Int,
+    cardCount: Int,
+    onCountDecrement: () -> Unit,
+    onCountIncrement: () -> Unit,
+    onCountReset: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Surface(shape = MaterialTheme.shapes.large, tonalElevation = 10.dp) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(IntrinsicSize.Min)) {
-            Counter(card.count)
+    Surface(shape = MaterialTheme.shapes.large, tonalElevation = 10.dp, modifier = modifier) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.width(IntrinsicSize.Min)
+        ) {
+            Counter(cardCount)
             Divider()
             Row(
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.height(IntrinsicSize.Min)
             ) {
                 CountButton(
-                    onClick = { onCountDecrement(card) },
-                    onLongClick = { onCountReset(card) },
+                    onClick = onCountDecrement,
+                    onLongClick = onCountReset,
                     id = R.drawable.substract_icon
                 )
-                CardToCount(card.number)
-                CountButton(onClick = { onCountIncrement(card) }, id = R.drawable.add_icon)
+                VerticalDivider()
+                CardToCount(cardNumber, modifier = Modifier.weight(1f))
+                VerticalDivider()
+                CountButton(onClick = onCountIncrement, id = R.drawable.add_icon)
             }
         }
     }
 }
 
 @Composable
-private fun Counter(count: Int) {
-    Text(text = "$count", modifier = Modifier.padding(10.dp))
+private fun Counter(count: Int, modifier: Modifier = Modifier) {
+    Text(text = "$count", modifier = modifier.padding(10.dp))
 }
 
 @Composable
-private fun CardToCount(cardNumber: Int) {
-    Text(text = "Card $cardNumber")
+private fun CardToCount(cardNumber: Int, modifier: Modifier = Modifier) {
+    Text(text = "Card $cardNumber", modifier = modifier)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun CountButton(onClick: () -> Unit, onLongClick: () -> Unit = { }, @DrawableRes id: Int) {
-    TextButton(
-        onClick = onClick, modifier = Modifier.combinedClickable(
-            onClick = onClick, // TODO: Revisar que no se clique dos veces
+private fun CountButton(
+    modifier: Modifier = Modifier,
+    @DrawableRes id: Int,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit = { }
+) {
+    Box(
+        modifier = modifier.combinedClickable(
+            onClick = onClick,
             onLongClick = onLongClick,
         )
     ) {
-        Icon(painterResource(id = id), contentDescription = null)
+        Icon(painterResource(id = id), contentDescription = null, modifier = Modifier.padding(10.dp))
     }
+}
+
+@Composable
+private fun VerticalDivider() {
+    Divider(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(1.dp)
+    )
 }
 
 @Preview
@@ -72,6 +94,6 @@ fun CardCounterPreview() {
     val sampleCard = Card(1)
 
     RemigioCounterTheme {
-        CardCounter(sampleCard, {}, {}, {})
+        CardCounter(sampleCard.number, sampleCard.count, {}, {}, {})
     }
 }

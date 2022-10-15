@@ -8,9 +8,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
@@ -61,7 +61,7 @@ fun CardOption(cardNumber: CardNumber) {
                 if (count.value == 4) count.value = 0
                 else ++count.value
             },
-            onCardLongClicked =  {
+            onCardLongClicked = {
                 count.value = 0
             }
         )
@@ -70,7 +70,12 @@ fun CardOption(cardNumber: CardNumber) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardOption(cardNumber: CardNumber, selectedCount: Int, onCardClicked: () -> Unit, onCardLongClicked: () -> Unit) {
+fun CardOption(
+    cardNumber: CardNumber,
+    selectedCount: Int,
+    onCardClicked: () -> Unit,
+    onCardLongClicked: () -> Unit
+) {
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         Image(
             painter = painterResource(id = obtainImageDrawable(cardNumber, selectedCount)),

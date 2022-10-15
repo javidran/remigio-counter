@@ -1,4 +1,4 @@
-package com.dran.remigiocounter
+package com.dran.remigiocounter.viewmodels
 
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,11 @@ class CardModelView : ViewModel() {
         get() = _cardList
 
     fun onCountIncrement(card: Card) {
-        _cardList.find { it.number == card.number }?.let { item -> item.count = item.count + 1 }
+        _cardList.find {
+            it.number == card.number
+        }?.let { item ->
+            item.count = item.count + 1
+        }
     }
 
     fun onCountDecrement(card: Card) {
@@ -23,4 +27,4 @@ class CardModelView : ViewModel() {
     }
 }
 
-private fun getCards() = List(12) { i -> Card(i)}
+private fun getCards() = List(12) { i -> Card(i) }
