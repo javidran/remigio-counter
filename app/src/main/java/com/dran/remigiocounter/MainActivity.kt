@@ -8,8 +8,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -20,7 +20,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dran.remigiocounter.enums.Card
+import com.dran.remigiocounter.enums.CardNumber
+import com.dran.remigiocounter.ui.MainUI
 import com.dran.remigiocounter.ui.theme.NoRippleTheme
 import com.dran.remigiocounter.ui.theme.RemigioCounterTheme
 
@@ -28,24 +29,29 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RemigioCounterTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Column {
-                        CardOption(cardNumber = Card.ONE)
-                        CardOption(cardNumber = Card.TWO)
-                    }
-                }
+            MainUI()
+        }
+    }
+}
+
+@Composable
+fun DeprecatedMainUI() {
+    RemigioCounterTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column {
+                CardOption(cardNumber = CardNumber.ONE)
+                CardOption(cardNumber = CardNumber.TWO)
             }
         }
     }
 }
 
 @Composable
-fun CardOption(cardNumber: Card) {
+fun CardOption(cardNumber: CardNumber) {
     Row {
         val count = remember { mutableStateOf(0) }
         CardOption(
@@ -64,7 +70,7 @@ fun CardOption(cardNumber: Card) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardOption(cardNumber: Card, selectedCount: Int, onCardClicked: () -> Unit, onCardLongClicked: () -> Unit) {
+fun CardOption(cardNumber: CardNumber, selectedCount: Int, onCardClicked: () -> Unit, onCardLongClicked: () -> Unit) {
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         Image(
             painter = painterResource(id = obtainImageDrawable(cardNumber, selectedCount)),
@@ -78,9 +84,9 @@ fun CardOption(cardNumber: Card, selectedCount: Int, onCardClicked: () -> Unit, 
 }
 
 @DrawableRes
-private fun obtainImageDrawable(cardNumber: Card, selectedCount: Int): Int {
+private fun obtainImageDrawable(cardNumber: CardNumber, selectedCount: Int): Int {
     return when (cardNumber) {
-        Card.ONE -> when (selectedCount) {
+        CardNumber.ONE -> when (selectedCount) {
             0 -> R.drawable.uno_0
             1 -> R.drawable.uno_1
             2 -> R.drawable.uno_2
@@ -88,7 +94,7 @@ private fun obtainImageDrawable(cardNumber: Card, selectedCount: Int): Int {
             4 -> R.drawable.uno_4
             else -> throw java.lang.IllegalStateException()
         }
-        Card.TWO -> when (selectedCount) {
+        CardNumber.TWO -> when (selectedCount) {
             0 -> R.drawable.dos_0
             1 -> R.drawable.dos_1
             2 -> R.drawable.dos_2
@@ -104,6 +110,6 @@ private fun obtainImageDrawable(cardNumber: Card, selectedCount: Int): Int {
 @Composable
 fun CardPreview() {
     RemigioCounterTheme {
-        CardOption(cardNumber = Card.ONE)
+        CardOption(cardNumber = CardNumber.ONE)
     }
 }
