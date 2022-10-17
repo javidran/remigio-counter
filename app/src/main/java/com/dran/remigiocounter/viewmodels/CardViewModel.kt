@@ -19,4 +19,4 @@ class CardModelView : ViewModel() {
     }
 }
 
-private fun getCards() = List(12) { i -> Card(i+1) }
+private fun getCards() = List(12) { i -> Card(i + 1) }

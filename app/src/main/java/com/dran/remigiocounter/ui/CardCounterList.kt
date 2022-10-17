@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,7 @@ fun CardCounterList(
 @Preview
 @Composable
 private fun CardListPreview() {
-    val cardList = List(12) { i -> Card(i+1) }
+    val cardList = List(12) { i -> Card(i + 1) }
 
     RemigioCounterTheme() {
         CardCounterList(cardList, {}, {})

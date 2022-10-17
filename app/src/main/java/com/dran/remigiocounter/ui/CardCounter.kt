@@ -1,9 +1,7 @@
 package com.dran.remigiocounter.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,7 +22,11 @@ fun CardCounter(
     onCountIncrement: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Surface(shape = MaterialTheme.shapes.large, tonalElevation = 10.dp, modifier = modifier) {
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        tonalElevation = 10.dp,
+        modifier = modifier
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.width(IntrinsicSize.Min)
@@ -41,9 +43,17 @@ fun CardCounter(
                     id = R.drawable.substract_icon
                 )
                 VerticalDivider()
-                CardToCount(cardNumber, modifier = Modifier.weight(1f).padding(10.dp))
+                CardToCount(
+                    cardNumber = cardNumber,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                )
                 VerticalDivider()
-                CountButton(onClick = onCountIncrement, id = R.drawable.add_icon)
+                CountButton(
+                    onClick = onCountIncrement,
+                    id = R.drawable.add_icon
+                )
             }
         }
     }
@@ -66,11 +76,14 @@ private fun CountButton(
     onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier.clickable(
-            onClick = onClick,
-        )
+        modifier = modifier
+            .clickable(onClick = onClick)
     ) {
-        Icon(painterResource(id = id), contentDescription = null, modifier = Modifier.padding(10.dp))
+        Icon(
+            painterResource(id = id),
+            contentDescription = null,
+            modifier = Modifier.padding(10.dp)
+        )
     }
 }
 
