@@ -2,6 +2,7 @@ package com.dran.remigiocounter.ui
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -21,7 +22,6 @@ fun CardCounter(
     cardCount: Int,
     onCountDecrement: () -> Unit,
     onCountIncrement: () -> Unit,
-    onCountReset: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(shape = MaterialTheme.shapes.large, tonalElevation = 10.dp, modifier = modifier) {
@@ -38,11 +38,10 @@ fun CardCounter(
             ) {
                 CountButton(
                     onClick = onCountDecrement,
-                    onLongClick = onCountReset,
                     id = R.drawable.substract_icon
                 )
                 VerticalDivider()
-                CardToCount(cardNumber, modifier = Modifier.weight(1f))
+                CardToCount(cardNumber, modifier = Modifier.weight(1f).padding(10.dp))
                 VerticalDivider()
                 CountButton(onClick = onCountIncrement, id = R.drawable.add_icon)
             }
@@ -60,18 +59,15 @@ private fun CardToCount(cardNumber: Int, modifier: Modifier = Modifier) {
     Text(text = "Card $cardNumber", modifier = modifier)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CountButton(
     modifier: Modifier = Modifier,
     @DrawableRes id: Int,
     onClick: () -> Unit,
-    onLongClick: () -> Unit = { }
 ) {
     Box(
-        modifier = modifier.combinedClickable(
+        modifier = modifier.clickable(
             onClick = onClick,
-            onLongClick = onLongClick,
         )
     ) {
         Icon(painterResource(id = id), contentDescription = null, modifier = Modifier.padding(10.dp))
@@ -94,6 +90,6 @@ fun CardCounterPreview() {
     val sampleCard = Card(1)
 
     RemigioCounterTheme {
-        CardCounter(sampleCard.number, sampleCard.count, {}, {}, {})
+        CardCounter(sampleCard.number, sampleCard.count, {}, {})
     }
 }

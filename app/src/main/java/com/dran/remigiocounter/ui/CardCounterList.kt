@@ -16,7 +16,6 @@ fun CardCounterList(
     list: List<Card>,
     onCountDecrement: (Card) -> Unit,
     onCountIncrement: (Card) -> Unit,
-    onCountReset: (Card) -> Unit
 ) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(items = list, key = { card -> card.number }) { item ->
@@ -25,7 +24,6 @@ fun CardCounterList(
                 cardCount = item.count,
                 onCountDecrement = { onCountDecrement(item) },
                 onCountIncrement = { onCountIncrement(item) },
-                onCountReset = { onCountReset(item) },
                 modifier = Modifier.padding(10.dp)
             )
         }
@@ -35,9 +33,9 @@ fun CardCounterList(
 @Preview
 @Composable
 private fun CardListPreview() {
-    val cardList = List(12) { i -> Card(i) }
+    val cardList = List(12) { i -> Card(i+1) }
 
     RemigioCounterTheme() {
-        CardCounterList(cardList, {}, {}, {})
+        CardCounterList(cardList, {}, {})
     }
 }

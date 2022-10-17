@@ -20,8 +20,7 @@ fun MainUI() {
             CardCounterList(
                 list = cardViewModel.cardList,
                 onCountDecrement = cardViewModel::onCountDecrement,
-                onCountIncrement = cardViewModel::onCountIncrement,
-                onCountReset = cardViewModel::onCountReset
+                onCountIncrement = cardViewModel::onCountIncrement
             )
         }
     }

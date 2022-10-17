@@ -11,20 +11,12 @@ class CardModelView : ViewModel() {
         get() = _cardList
 
     fun onCountIncrement(card: Card) {
-        _cardList.find {
-            it.number == card.number
-        }?.let { item ->
-            item.count = item.count + 1
-        }
+        _cardList.find { it.number == card.number }?.let { item -> item.count += 1 }
     }
 
     fun onCountDecrement(card: Card) {
-        _cardList.find { it.number == card.number }?.let { item -> item.count = item.count - 1 }
-    }
-
-    fun onCountReset(card: Card) {
-        _cardList.find { it.number == card.number }?.let { item -> item.count = 0 }
+        _cardList.find { it.number == card.number }?.let { item -> item.count -= 1 }
     }
 }
 
-private fun getCards() = List(12) { i -> Card(i) }
+private fun getCards() = List(12) { i -> Card(i+1) }
