@@ -5,18 +5,38 @@ import androidx.lifecycle.ViewModel
 import com.dran.remigiocounter.datasource.Card
 
 class CardModelView : ViewModel() {
-    private val _cardList = getCards().toMutableStateList()
+    private var _cardList = getCards().toMutableStateList()
 
     val cardList: List<Card>
         get() = _cardList
 
-    fun onCountIncrement(card: Card) {
-        _cardList.find { it.number == card.number }?.let { item -> item.count += 1 }
+    fun totalCount() : Int {
+        var total = 0
+        _cardList.forEach { card -> total += card.points }
+        return total
     }
 
-    fun onCountDecrement(card: Card) {
-        _cardList.find { it.number == card.number }?.let { item -> item.count -= 1 }
+    fun onCountIncrement(index: Int) {
+        if(_cardList[index].count < MAX_COUNT) {
+            _cardList[index] = _cardList[index].copy(count = _cardList[index].count + 1)
+        }
+    }
+
+    fun onCountDecrement(index: Int) {
+        if(_cardList[index].count > MIN_COUNT) {
+            _cardList[index] = _cardList[index].copy(count = _cardList[index].count - 1)
+        }
+    }
+
+    fun onCountReset() {
+        _cardList.clear()
+        _cardList.addAll(getCards())
     }
 }
 
-private fun getCards() = List(12) { i -> Card(i + 1) }
+private fun getCards() : List<Card> {
+    return List(12) { i -> Card(i + 1) }
+}
+
+private const val MIN_COUNT = 0
+private const val MAX_COUNT = 8

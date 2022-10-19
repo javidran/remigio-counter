@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reset_count">Reiniciar cuenta</string>
+    <string name="total_points">Puntos totales</string>
+    <string name="points">puntos</string>
+</resources>

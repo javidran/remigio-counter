@@ -1,5 +1,6 @@
 package com.dran.remigiocounter.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,11 +20,20 @@ fun MainUI() {
         ) {
             val cardViewModel: CardModelView = viewModel()
             val cardList = remember { cardViewModel.cardList }
-            CardCounterList(
-                list = cardList,
-                onCountDecrement = cardViewModel::onCountDecrement,
-                onCountIncrement = cardViewModel::onCountIncrement
-            )
+
+            Column {
+                TotalPoints(points = cardViewModel.totalCount())
+                CardCounterList(
+                    list = cardList,
+                    onCountDecrement = cardViewModel::onCountDecrement,
+                    onCountIncrement = cardViewModel::onCountIncrement,
+                    modifier = Modifier.weight(1f)
+                )
+                Reset(
+                    onResetCount = cardViewModel::onCountReset
+                )
+            }
+
         }
     }
 }

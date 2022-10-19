@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">RemigioCounter</string>
+    <string name="app_name" translatable="false">Remigio Calc</string>
+    <string name="reset_count">Reset count</string>
+    <string name="total_points">Total points</string>
+    <string name="points">points</string>
+    <string name="card">Card</string>
 </resources>

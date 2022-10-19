@@ -1,13 +1,15 @@
 package com.dran.remigiocounter.ui
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dran.remigiocounter.R
@@ -18,6 +20,7 @@ import com.dran.remigiocounter.ui.theme.RemigioCounterTheme
 fun CardCounter(
     cardNumber: Int,
     cardCount: Int,
+    points: Int,
     onCountDecrement: () -> Unit,
     onCountIncrement: () -> Unit,
     modifier: Modifier = Modifier
@@ -31,7 +34,10 @@ fun CardCounter(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.width(IntrinsicSize.Min)
         ) {
-            Counter(cardCount)
+            Counter(
+                count = cardCount,
+                points = points
+            )
             Divider()
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -47,7 +53,6 @@ fun CardCounter(
                     cardNumber = cardNumber,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(10.dp)
                 )
                 VerticalDivider()
                 CountButton(
@@ -60,13 +65,34 @@ fun CardCounter(
 }
 
 @Composable
-private fun Counter(count: Int, modifier: Modifier = Modifier) {
-    Text(text = "$count", modifier = modifier.padding(10.dp))
+private fun Counter(count: Int, points: Int, modifier: Modifier = Modifier) {
+    Text(text = "$count ($points ${stringResource(id = R.string.points)})", style = MaterialTheme.typography.bodySmall, modifier = modifier.padding(10.dp))
 }
 
 @Composable
 private fun CardToCount(cardNumber: Int, modifier: Modifier = Modifier) {
-    Text(text = "Card $cardNumber", modifier = modifier)
+//    Text(text = "Card $cardNumber", modifier = modifier)
+    val id = when(cardNumber) {
+        1 -> R.drawable.copas1
+        2 -> R.drawable.copas2
+        3 -> R.drawable.copas3
+        4 -> R.drawable.copas4
+        5 -> R.drawable.copas5
+        6 -> R.drawable.copas6
+        7 -> R.drawable.copas7
+        8 -> R.drawable.copas8
+        9 -> R.drawable.copas9
+        10 -> R.drawable.copas10
+        11 -> R.drawable.copas11
+        12 -> R.drawable.copas12
+        else -> R.drawable.copas1
+    }
+
+    Image(
+        painter = painterResource(id = id),
+        contentDescription = "${stringResource(id = R.string.card)} $cardNumber",
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -75,9 +101,11 @@ private fun CountButton(
     @DrawableRes id: Int,
     onClick: () -> Unit,
 ) {
-    Box(
+    Column (
         modifier = modifier
             .clickable(onClick = onClick)
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
             painterResource(id = id),
@@ -97,12 +125,33 @@ private fun VerticalDivider() {
 }
 
 @Preview
-@Preview(showBackground = true)
 @Composable
 fun CardCounterPreview() {
-    val sampleCard = Card(1)
+    var sampleCard by remember { mutableStateOf( Card(1) ) }
 
     RemigioCounterTheme {
-        CardCounter(sampleCard.number, sampleCard.count, {}, {})
+        CardCounter(
+            cardNumber = sampleCard.number,
+            cardCount = sampleCard.count,
+            points = sampleCard.points,
+            onCountDecrement = { if(sampleCard.count > 0) sampleCard = sampleCard.copy(count = sampleCard.count - 1) },
+            onCountIncrement = { sampleCard = sampleCard.copy(count = sampleCard.count + 1) }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CardCounter2Preview() {
+    val sampleCard by remember { mutableStateOf( Card(1), neverEqualPolicy()) }
+
+    RemigioCounterTheme {
+        CardCounter(
+            cardNumber = sampleCard.number,
+            cardCount = sampleCard.count,
+            points = sampleCard.points,
+            onCountDecrement = { if(sampleCard.count > 0) sampleCard.count -= 1 },
+            onCountIncrement = { sampleCard.count += 1 }
+        )
     }
 }
