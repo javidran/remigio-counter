@@ -4,14 +4,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('debug')
-            storePassword 'debug'
-            keyAlias 'debug'
-            keyPassword 'debug'
-        }
-    }
     compileSdk 33
 
     defaultConfig {
